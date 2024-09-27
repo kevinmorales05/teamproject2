@@ -17,4 +17,4 @@ Sam Gordan
 Harold Moises Gonzalez Benavente
 Omar Navarro Yanez
 Kevin Morales Estrella
-Hernan Yupanqui Yupanqui Prieto
+Hernan Raymondt Yupanqui Prieto
