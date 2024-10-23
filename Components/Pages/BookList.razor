@@ -1,0 +1,38 @@
+@page "/bookList"
+@using Microsoft.EntityFrameworkCore
+@using Team2Project.Models
+@inject ApplicationDbContext DbContext
+
+<h1>Book List</h1>
+<p>These are the available books</p>
+
+@if (books == null)
+{
+  <p>Loading...</p>
+}
+else if (!books.Any())
+{
+  <p>No books found.</p>
+}
+else
+{
+  <ul>
+  @foreach (var book in books)
+    {
+      <li>@book.Name (@book.Author)</li>
+    }
+  </ul>
+}
+
+@code {
+  private List<Book> books;
+
+  protected override async Task OnInitializedAsync()
+  {
+
+    books = await DbContext.Books.ToListAsync();
+
+
+  }
+
+}
