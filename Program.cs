@@ -1,10 +1,17 @@
+using Microsoft.EntityFrameworkCore;
 using Team2Project.Components;
+using Team2Project.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Add ApplicationDbContext to the service container and configure it to use SQLite
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 var app = builder.Build();
 
