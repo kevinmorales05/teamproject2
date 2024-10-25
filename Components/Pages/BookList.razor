@@ -1,0 +1,40 @@
+@page "/bookList"
+@using Microsoft.EntityFrameworkCore
+@using Team2Project.Models
+@inject ApplicationDbContext DbContext
+
+<h1>Book List</h1>
+<p>These are the available books</p>
+
+@if (books == null)
+{
+  <p>Loading...</p>
+}
+else if (!books.Any())
+{
+  <p>No books found.</p>
+}
+else
+{
+  <ul>
+  @foreach (var book in books)
+    {
+      <div class="book-card">
+        <div class="book-cover">
+          <h3>@book.Name</h3>
+          <h2>@book.Author</h2>
+        </div>
+        <div class="book-content">
+          <p>Publication Date: @book.PublicationDate</p>
+        </div>
+      </div>
+    }
+  </ul>
+}
+
+@code {
+  private List<Book> books = SeedData.GetBooks();
+
+
+
+}

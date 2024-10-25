@@ -1,4 +1,4 @@
-using System;
+namespace Team2Project.Models;
 
 public static class SeedData
 {

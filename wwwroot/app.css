@@ -49,3 +49,126 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+
+/* WISH LIST STYLING */
+
+/* Container that holds the suggestions */
+.suggestions-container {
+    display: flex;
+    overflow-x: auto; /* Allows horizontal scrolling */
+    max-width: 100%; /* full width*/
+    padding: 10px 0;
+    gap: 10px; /* Space between suggestion cards */
+    scrollbar-width: thin; /* Makes the scrollbar thinner (for Firefox) */
+    max-width: calc(200px * 5 + 40px);
+}
+
+.suggestions-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.suggestions-container::-webkit-scrollbar-thumb {
+    background-color: #bbb; /* Color of the scrollbar */
+    border-radius: 10px;
+}
+
+/* Each suggestion card */
+.suggestion-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 200px; /* Minimum width of each card */
+    padding: 15px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect on suggestion cards */
+.suggestion-card:hover {
+    transform: translateY(-5px); /* Slightly raise the card */
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2); /* Enhance the shadow */
+}
+
+/* Button inside each suggestion card */
+.suggestion-card button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+}
+
+/* Button hover effect */
+.suggestion-card button:hover {
+    background-color: #0056b3;
+}
+
+/* Span with book title and author */
+.suggestion-card span {
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Wish List Book Cards*/
+
+/* Wishlist Container to dispaly books in 4-column grid*/
+.wishlist-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+/* Each Card in the wishlist */
+.wishlist-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wishlist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.wishlist-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: #333;  
+}
+
+.wishlist-card p {
+    margin: 5px 0; 
+    color: #555;
+    font-size: 1rem;
+}
+.wishlist-card p strong {
+    color: #007bff;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 1200px) {
+    .wishlist-container {
+        grid-template-columns: repeat(3, 1fr); /* Switch to 3 columns on medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .wishlist-container {
+        grid-template-columns: repeat(2, 1fr); /* Switch to 2 columns on smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .wishlist-container {
+        grid-template-columns: 1fr; /* Stack the cards on very small screens */
+    }
+}

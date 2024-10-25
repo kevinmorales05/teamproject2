@@ -1,10 +1,85 @@
 ﻿@page "/wishlist"
+
+@using System.Collections.Generic
+@using Team2Project.Models
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Wish List</PageTitle>
 
-<h1>Wish Listist</h1>
+<h1>Wish List</h1>
+
+<!-- Search Bar -->
+<div class="search-container">
+    <input @bind="searchQuery" placeholder="Search for a book..." class="search-input" />
+</div>
+
+<!-- Suggestions Area -->
+<h4>Suggestions</h4>
+<div class="suggestions-container">
+    @foreach (var book in SuggestedBooks)
+    {
+        <div class="suggestion-card">
+            <button @onclick="() => AddToWishlist(book)">Add to Wishlist</button>
+            <span>@book.Name by @book.Author</span>
+        </div>
+    }
+</div>
+
+<div class="app-layout">
+
+    <!-- Wishlist Library -->
+    <h2>Wishlist</h2>
+    <div class="wishlist-container">
+        @if (wishlistBooks.Count == 0)
+        {
+            <p>No books in wishlist.</p>
+        }
+        else
+        {
+            <div class="book-grid">
+                @foreach (var book in wishlistBooks)
+                {
+                    <div class="wishlist-card">
+                        <!-- <img src="images/@book.Name.Replace(" ", "-").ToLower().Trim().Replace(".", "") + ".jpg" alt="@book.Name" class="book-image"/> -->
+                        <div class="book-info">
+                            <h3>@book.Name</h3>
+                            <p><strong>Author:</strong> @book.Author</p>
+                            <p><strong>Published:</strong> @book.PublicationDate.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    
+</div>
 
 @code {
-   
+    private string searchQuery = string.Empty;
+    private List<Book> books = SeedData.GetBooks();
+    private List<Book> wishlistBooks = new List<Book>(); // Renamed to avoid conflict
+
+    // Filtered books based on search query
+    private IEnumerable<Book> FilteredBooks =>
+        string.IsNullOrEmpty(searchQuery)
+            ? books
+            : books.Where(b => b.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) 
+                            || b.Author.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+
+    // Suggested books, filtered based on search query
+    private IEnumerable<Book> SuggestedBooks =>
+        string.IsNullOrEmpty(searchQuery)
+            ? books // Display all books if search is empty
+            : books.Where(b => b.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) 
+                            || b.Author.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+
+    // Add book to wishlist if not already present
+    private void AddToWishlist(Book book)
+    {
+        if (!wishlistBooks.Any(b => b.Id == book.Id))
+        {
+            wishlistBooks.Add(book);
+        }
+    }
 }
