@@ -1,0 +1,41 @@
+@page "/example"
+@using Microsoft.EntityFrameworkCore
+@using Team2Project.Models
+@inject ApplicationDbContext DbContext
+
+
+<h2>Accounts</h2>
+<p>This is just an example about how to get data</p>
+@if (accounts == null)
+{
+  <p>Loading...</p>
+}
+else if (!accounts.Any())
+{
+  <p>No accounts found.</p>
+}
+else
+{
+  <ul>
+  @foreach (var account in accounts)
+    {
+      <li>@account.Username (@account.Email)</li>
+    }
+  </ul>
+}
+
+
+
+
+@code {
+  private List<Account> accounts;
+
+  protected override async Task OnInitializedAsync()
+  {
+
+    accounts = await DbContext.Accounts.ToListAsync();
+
+
+  }
+
+}
