@@ -29,12 +29,14 @@ namespace Team2Project.Models
       modelBuilder.Entity<Wishlist>()
           .HasOne(w => w.Account)
           .WithMany()
-          .HasForeignKey(w => w.AccountId);
+          .HasForeignKey(w => w.AccountId)
+          .OnDelete(DeleteBehavior.Cascade);
 
       modelBuilder.Entity<Wishlist>()
         .HasOne(w => w.Book)
         .WithMany()
-        .HasForeignKey(w => w.BookId);
+        .HasForeignKey(w => w.BookId)
+        .OnDelete(DeleteBehavior.Cascade);;
 
       modelBuilder.Entity<Entries>()
           .HasOne(e => e.Account)
