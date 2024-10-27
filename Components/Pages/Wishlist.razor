@@ -1,7 +1,11 @@
 ﻿@page "/wishlist"
 
 @using System.Collections.Generic
+@using Microsoft.AspNetCore.Components.Authorization
 @using Team2Project.Models
+@inject NavigationManager NavigationManager
+@inject WishlistService WishlistService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
@@ -20,7 +24,7 @@
     @foreach (var book in SuggestedBooks)
     {
         <div class="suggestion-card">
-            <button @onclick="() => AddToWishlist(book)">Add to Wishlist</button>
+            <button @onclick="() => AddToWishlist(book.Id)">Add to Wishlist</button>
             <span>@book.Name by @book.Author</span>
         </div>
     }
@@ -52,17 +56,25 @@
             </div>
         }
     </div>
-    
+
 </div>
 
 @code {
     private string searchQuery = string.Empty;
     private List<Book> books = SeedData.GetBooks();
-    private List<Book> wishlistBooks = new List<Book>(); // Renamed to avoid conflict
+    private List<Book> wishlistBooks = new List<Book>();
+
+    private int accountId = 1; // Replace with the actual logged-in user's AccountId
+
+    protected override void OnInitialized()
+    {
+        // Check to see if a user is logged in
+        wishlistBooks = WishlistService.GetWishlistBooks(accountId);
+    }
 
     // Filtered books based on search query
     private IEnumerable<Book> FilteredBooks =>
-        string.IsNullOrEmpty(searchQuery)
+    string.IsNullOrEmpty(searchQuery)
             ? books
             : books.Where(b => b.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) 
                             || b.Author.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
@@ -75,11 +87,24 @@
                             || b.Author.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
 
     // Add book to wishlist if not already present
-    private void AddToWishlist(Book book)
+    private async Task AddToWishlist(int bookId)
     {
-        if (!wishlistBooks.Any(b => b.Id == book.Id))
+        // Get the authentication state
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        // Check if the user is authenticated
+        if (!user.Identity.IsAuthenticated)
         {
-            wishlistBooks.Add(book);
+            // Redirect to login or show a message
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+        // Proceed with adding to wishlist if the user is authenticated
+        if (!wishlistBooks.Any(b => b.Id == bookId))
+        {
+            await WishlistService.AddToWishlist(accountId, bookId); // Add to database
+            wishlistBooks = WishlistService.GetWishlistBooks(accountId); // Refresh wishlist
         }
     }
 }

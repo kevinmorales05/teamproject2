@@ -12,6 +12,9 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<WishlistService>(); // add wishlsit services to record user's wishlists
+
+
 
 var app = builder.Build();
 
