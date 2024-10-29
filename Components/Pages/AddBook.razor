@@ -1,0 +1,76 @@
+@page "/addBook"
+@using Microsoft.EntityFrameworkCore
+@using Team2Project.Models
+@using Team2Project.Services
+
+
+@inject ApplicationDbContext DbContext
+@rendermode InteractiveServer
+
+
+<PageTitle>Add New Book</PageTitle>
+@code {
+    private List<Book> books = SeedData.GetBooks();
+    public string Name { get; set; } = string.Empty;
+    public string Author { get; set; } = string.Empty;
+    public DateTime Publication { get; set; }
+    public string Editorial { get; set; } = string.Empty;
+
+    // For the modal
+    private bool showModal;
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+
+    private void AddNewBook()
+    {
+        // code to be executed
+        Console.WriteLine("New Book Added!");
+    }
+    
+    private async Task HandleSubmit()
+    {
+        Console.WriteLine($"Name: {Name}, Last Name: {Author}, Birthdate: {Editorial}");
+        Book newBook = new Book { 
+             Name = Name, Author = Author, PublicationDate = Publication, Editorial = Editorial,
+            CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now };
+        newBook.Id = Guid.NewGuid(); // Generate a new unique ID
+        BookService.Add(newBook);
+        DbContext.Books.Add(newBook);
+        await DbContext.SaveChangesAsync();
+        //newBook = new Book(); // Reset the form after submission
+        showModal = true;
+    }
+}
+<h1>Add new Book</h1>
+<p>Ingress all of the required information to create a new book</p>
+<h3>User Form</h3>
+
+<EditForm Model="@this" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <div>
+        <label>Book's Name:</label>
+        <InputText @bind-Value="Name" />
+    </div>
+
+    <div>
+        <label>Book's Author:</label>
+        <InputText @bind-Value="Author" />
+    </div>
+
+    <div>
+        <label>Book's Editorial:</label>
+        <InputText @bind-Value="Editorial" />
+    </div>
+    <div>
+        <label>Book's Publication Date:</label>
+        <InputDate @bind-Value="Publication" />
+    </div>
+
+    <button type="submit">Create Book</button>
+</EditForm>
+
+<Modal IsVisible="showModal" OnClose="CloseModal" />

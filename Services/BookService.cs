@@ -18,7 +18,7 @@ public static class BookService
         books = new List<Book>{
             new Book
             {
-                Id = 1,
+                Id = Guid.NewGuid(),
                 Name = "Babel",
                 Author = "R.F. Kuang",
                 PublicationDate = new DateTime(2022, 8, 23),
@@ -28,7 +28,7 @@ public static class BookService
             },
             new Book
             {
-                Id = 2,
+                Id = Guid.NewGuid(),
                 Name = "Crying in H Mart",
                 Author = "Michelle Zauner",
                 PublicationDate = new DateTime(2021, 4, 20),
@@ -38,7 +38,7 @@ public static class BookService
             },
             new Book
             {
-                Id = 3,
+                Id = Guid.NewGuid(),
                 Name = "Dark Matter",
                 Author = "Blake Crouch",
                 PublicationDate = new DateTime(2016, 7, 26),
@@ -48,7 +48,7 @@ public static class BookService
             },
             new Book
             {
-                Id = 4,
+                Id = Guid.NewGuid(),
                 Name = "Fourth Wing",
                 Author = "Rebecca Yarros",
                 PublicationDate = new DateTime(2023, 5, 2),
@@ -64,15 +64,15 @@ public static class BookService
         return books;
     }
 
-    public static Book? Get(int id) => books.FirstOrDefault(p => p.Id == id);
+    public static Book? Get( Guid id) => books.FirstOrDefault(p => p.Id == id);
 
     public static void Add(Book Book)
     {
-        Book.Id = nextId++;
+        Book.Id = Guid.NewGuid();
         books.Add(Book);
     }
 
-    public static void Delete(int id)
+    public static void Delete(Guid id)
     {
         var Book = Get(id);
         if(Book is null)

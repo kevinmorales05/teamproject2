@@ -18,3 +18,11 @@ TODO: Describe and show how to build your code and run the tests.
 - Omar Navarro Yanez
 - Kevin Morales Estrella
 - Hernan Raymondt Yupanqui Prieto
+
+
+## Use full information
+
+- Delete the database
+dotnet ef database drop --force
+- Build the database
+dotnet ef database update

@@ -2,29 +2,31 @@
 @using Microsoft.EntityFrameworkCore
 @using Team2Project.Models
 @inject ApplicationDbContext DbContext
+@rendermode InteractiveServer
 
 <PageTitle>Books List</PageTitle>
 
 <h1>Book List</h1>
 <p>These are the available books</p>
 
-@if (books == null)
+@if (books2 == null)
 {
   <p>Loading...</p>
 }
-else if (!books.Any())
+else if (!books2.Any())
 {
   <p>No books found.</p>
 }
 else
 {
-  <ul>
-  @foreach (var book in books)
+  <ul class="book-list">
+  @foreach (var book in books2)
     {
       <div class="book-card">
         <div class="book-cover">
-          <h3>@book.Name</h3>
-          <h2>@book.Author</h2>
+          <h2>@book.Name</h2>
+          <h3>@book.Author</h3>
+          <p>Editorial: @book.Editorial</p>
         </div>
         <div class="book-content">
           <p>Publication Date: @book.PublicationDate</p>
@@ -35,7 +37,18 @@ else
 }
 
 @code {
-  private List<Book> books = SeedData.GetBooks();
+  //private List<Book> books = SeedData.GetBooks();
+
+  private List<Book> books2;
+
+    protected override async Task OnInitializedAsync()
+  {
+
+    books2 = await DbContext.Books.ToListAsync();
+
+
+  }
+  
 
 
 
