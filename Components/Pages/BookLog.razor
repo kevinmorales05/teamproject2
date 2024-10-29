@@ -66,8 +66,8 @@
                         <td>@logEntry.CreatedAt.ToString("g")</td>
                         <td>@logEntry.UpdatedAt.ToString("g")</td>
                         <td>
-                            <button >Edit</button>
-                            <button >Delete</button>
+                            <button @onclick="() => OpenUpdateDialog(logEntry)">Edit</button>
+                            <button @onclick="() => OpenDeleteDialog(logEntry)">Delete</button>
                         </td>
                     </tr>
                 }
@@ -76,10 +76,37 @@
     }
 </div>
 
+<Dialog Title="Update Progress" Opened="isUpdateDialogOpen" CloseButtonClicked="@CloseUpdateDialog">
+    <BodyContent>
+        <p>Book Name: @selectedEntry.Book.Name</p>
+        <label>Progress Percentage:</label>
+        <input type="number" @bind="selectedEntry.ProgressPercentage" min="0" max="100" />
+    </BodyContent>
+    <FooterContent>
+        <button class="ok" @onclick="ConfirmUpdate">Update</button>
+        <button class="cancel" @onclick="CloseUpdateDialog">Cancel</button>
+    </FooterContent>
+</Dialog>
+
+<Dialog Title="Delete Confirmation" Opened="isDeleteDialogOpen" CloseButtonClicked="@CloseDeleteDialog">
+    <BodyContent>
+        <p>Are you sure you want to delete this entry?</p>
+    </BodyContent>
+    <FooterContent>
+        <button class="ok" @onclick="ConfirmDelete">Delete</button>
+        <button class="cancel" @onclick="CloseDeleteDialog">Cancel</button>
+    </FooterContent>
+</Dialog>
+
+
 @code {
     private Entries entry = new Entries();
     private List<Entries> entries = new List<Entries>();
     private List<Book> availableBooks = new List<Book>();
+    private bool isUpdateDialogOpen = false;
+    private bool isDeleteDialogOpen = false;
+    private Entries selectedEntry = new Entries();
+    
     
     private string errorMessage = string.Empty;
     [CascadingParameter]
@@ -148,6 +175,43 @@
         entry = new Entries(); // Reset entry
     }
 
+    private void OpenUpdateDialog(Entries entry)
+    {
+        selectedEntry = entry;  // Set the selected entry for editing
+        isUpdateDialogOpen = true;
+    }
+
+    private void CloseUpdateDialog()
+    {
+        isUpdateDialogOpen = false;
+        selectedEntry = new Entries(); // Reset the selected entry
+    }
+
+    private async Task ConfirmUpdate()
+    {
+        await BookLogService.UpdateBookLog(selectedEntry);
+        await LoadEntries();  // Reload entries to reflect the updated data
+        CloseUpdateDialog();  // Close the dialog
+    }
+
+    private void OpenDeleteDialog(Entries entry)
+    {
+        selectedEntry = entry;  // Set the selected entry for deletion
+        isDeleteDialogOpen = true;
+    }
+
+    private void CloseDeleteDialog()
+    {
+        isDeleteDialogOpen = false;
+        selectedEntry = new Entries(); // Reset the selected entry
+    }
+
+    private async Task ConfirmDelete()
+    {
+        await BookLogService.DeleteBookLog(selectedEntry.Id);
+        await LoadEntries();  // Reload entries to reflect the deletion
+        CloseDeleteDialog();  // Close the dialog
+    }
+
+
 }
-
-
