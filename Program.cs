@@ -14,6 +14,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<WishlistService>(); // add wishlsit services to record user's wishlists
 
+builder.Services.AddScoped<BookLogService>(); // add booklog service to record user's booklogs
+
 
 
 var app = builder.Build();

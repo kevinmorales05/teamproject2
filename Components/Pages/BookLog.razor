@@ -1,0 +1,130 @@
+@page "/bookLog"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.EntityFrameworkCore
+@using Team2Project.Models
+@inject NavigationManager NavigationManager
+@inject BookLogService BookLogService
+@rendermode InteractiveServer
+
+<PageTitle>Book Log</PageTitle>
+
+<h1>Book Log</h1>
+
+<!-- Form to Add a New Entry -->
+<div class="form-container">
+    <h2>Add Book Progress</h2>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p style="color:red">@errorMessage</p>
+    }
+
+    <div>
+        <label>Book:</label>
+        <select @bind="entry.BookId">
+            <option value="">-- Select a Book --</option>
+            @foreach (var book in availableBooks)
+            {
+                <option value="@book.Id">@book.Name by @book.Author</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label>Progress Percentage:</label>
+        <input type="number" @bind="entry.ProgressPercentage" min="0" max="100" />
+    </div>
+
+    <button @onclick="AddToBookLog">Add Entry</button>
+</div>
+
+<!-- Display Entries in the Book Log -->
+<div class="log-container">
+    <h2>Book Progress Log</h2>
+    @if (entries.Count == 0)
+    {
+        <p>No entries found.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Book Name</th>
+                    <th>Progress (%)</th>
+                    <th>Date Created</th>
+                    <th>Last Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var logEntry in entries)
+                {
+                    <tr>
+                        <td>@availableBooks.FirstOrDefault(b => b.Id == logEntry.BookId)?.Name</td>
+                        <td>@logEntry.ProgressPercentage</td>
+                        <td>@logEntry.CreatedAt.ToString("g")</td>
+                        <td>@logEntry.UpdatedAt.ToString("g")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    private Entries entry = new Entries();
+    private List<Entries> entries = new List<Entries>();
+    private List<Book> availableBooks = new List<Book>();
+    private int AccountId = 1;
+    private string errorMessage = string.Empty;
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask {get; set;}
+
+    protected override async Task OnInitializedAsync()
+    {
+        availableBooks = await BookLogService.LoadBooks();
+        await LoadEntries();
+        Console.WriteLine("HEre it comes jeheh");
+        await GetAccountId();
+
+    }
+
+    public async Task GetAccountId() {
+        var authState = await authenticationStateTask;
+        Console.WriteLine("HEre it comes jeheh");
+        Console.WriteLine(authState?.User?.Identity?.Name);
+    }
+
+    private async Task LoadEntries()
+    {
+        entries = await BookLogService.GetEntryList(AccountId);
+    }
+
+    private async Task AddToBookLog()
+    {
+        // Reset error message
+        errorMessage = string.Empty;
+
+        // Validate fields
+        if (entry.BookId == 0)
+        {
+            errorMessage = "Please select a book.";
+            return;
+        }
+
+        if (entry.ProgressPercentage == null || entry.ProgressPercentage < 0 || entry.ProgressPercentage > 100)
+        {
+            errorMessage = "Please enter a valid progress percentage (0-100).";
+            return;
+        }
+
+        // Call the service to add the entry
+        await BookLogService.AddToBookLog(AccountId, entry);
+
+        // Reload entries and reset the form
+        await LoadEntries();
+        entry = new Entries();
+    }
+}
+
+
