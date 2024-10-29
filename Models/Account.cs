@@ -1,9 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Team2Project.Models
 {
   public class Account
   {
     public int AccountId { get; set; }
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide Username")]
     public string Username { get; set; }
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide Password")]
     public string Password { get; set; }
     public string Email { get; set; }
     public string? ProfilePicture {get; set;}

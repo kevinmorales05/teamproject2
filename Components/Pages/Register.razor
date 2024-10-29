@@ -1,1 +1,74 @@
 @page "/register"
+@using Team2Project.Models
+@inject NavigationManager navigationManager
+@inject ApplicationDbContext ApplicationDbContext
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <EditForm Model="@account" OnValidSubmit="RegisterUser" FormName="RegisterForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="mb-3 text-center flex-column">
+                <h3>Register</h3>
+            </div>
+            <div class="mb-3">
+                <label>Username</label>
+                <InputText @bind-Value="account.Username" class="form-control" />
+                <ValidationMessage For="() => account.Username" />
+            </div>
+            <div class="mb-3">
+                <label>Password</label>
+                <InputText @bind-Value="account.Password" type="password" class="form-control" />
+                <ValidationMessage For="() => account.Password" />
+            </div>
+            <div class="mb-3">
+                <label>First Name</label>
+                <InputText @bind-Value="people.FirstName" class="form-control" />
+                <ValidationMessage For="() => people.FirstName" />
+            </div>
+            <div class="mb-3">
+                <label>Last Name</label>
+                <InputText @bind-Value="people.LastName" class="form-control" />
+                <ValidationMessage For="() => people.LastName" />
+            </div>
+            <div class="mb-3">
+                <label>Email</label>
+                <InputText @bind-Value="account.Email" class="form-control" />
+                <ValidationMessage For="() => account.Email" />
+            </div>
+            <div class="mb-3 d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public Account account {get;set;} = new();
+    [SupplyParameterFromForm]
+    public People people {get;set;} = new();
+    private async Task RegisterUser()
+    {
+    
+        var person = new People{
+            FirstName  = "first name",
+            LastName = "Last"
+        };
+
+        var newAccount = new Account
+        {
+            Username = account.Username,
+            Password = account.Password,
+            Email = account.Email,
+            People = person
+        };
+
+        // Add to the database
+        ApplicationDbContext.Accounts.Add(newAccount);
+        await ApplicationDbContext.SaveChangesAsync();
+
+        // Redirect to the login page
+        navigationManager.NavigateTo("/login");
+    }
+}
