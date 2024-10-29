@@ -34,9 +34,12 @@ public class BookLogService{
     public async Task<List<Book>> LoadBooks() {
         return await _context.Books.ToListAsync();
     }
+<<<<<<< HEAD
 
     public async Task LoadOnce() {
         await _context.Books.AddRangeAsync(SeedData.GetBooks());
         await _context.SaveChangesAsync();
     }
+=======
+>>>>>>> b8f95b0 (Co-authored-by: Yupanqui Prieto, Hernan Yupanqui <yup19001@byui.edu>)
 }
