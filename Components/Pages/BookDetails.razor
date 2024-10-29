@@ -1,0 +1,50 @@
+<!-- BookDetails.razor -->
+@page "/bookdetails/{bookId:guid}"
+@inject NavigationManager Navigation
+@using Team2Project.Models
+@using Team2Project.Services
+@inject ApplicationDbContext DbContext
+@rendermode InteractiveServer
+
+<h3>Book Details</h3>
+
+@if (book != null)
+{
+    <div>
+        <p><strong>Name:</strong> @book.Name</p>
+        <p><strong>Author:</strong> @book.Author</p>
+        <p><strong>Publication Date:</strong> @book.PublicationDate.ToShortDateString()</p>
+        <p><strong>Editorial:</strong> @book.Editorial</p>
+        <button @onclick="DeleteBook">Delete</button>
+    </div>
+}
+else
+{
+    <p>Loading book details...</p>
+}
+
+@code {
+    [Parameter]
+    public Guid bookId { get; set; }
+
+    private Book book;
+
+    protected override async Task OnInitializedAsync()
+    {
+        book = await DbContext.Books.FindAsync(bookId);
+        await DbContext.SaveChangesAsync();
+    }
+    protected  async Task DeleteBook()
+    {
+        
+        Console.WriteLine("Delete a new book!");
+        var book = await DbContext.Books.FindAsync(bookId);
+        if (book != null)
+        {
+            DbContext.Books.Remove(book);
+            await DbContext.SaveChangesAsync();
+        }
+        Navigation.NavigateTo("/bookList");
+    }
+}
+

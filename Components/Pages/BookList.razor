@@ -3,6 +3,7 @@
 @using Team2Project.Models
 @inject ApplicationDbContext DbContext
 @rendermode InteractiveServer
+@inject NavigationManager Navigation
 
 <PageTitle>Books List</PageTitle>
 
@@ -30,7 +31,13 @@ else
         </div>
         <div class="book-content">
           <p>Publication Date: @book.PublicationDate</p>
+          
+            <a class="button-navigate" @onclick="() => NavigateToDetails(book.Id)">
+                Navigate to @book.Name
+            </a>
+       
         </div>
+        
       </div>
     }
   </ul>
@@ -48,6 +55,11 @@ else
 
 
   }
+
+  private void NavigateToDetails(Guid bookId)
+    {
+        Navigation.NavigateTo($"/bookdetails/{bookId}");
+    }
   
 
 
