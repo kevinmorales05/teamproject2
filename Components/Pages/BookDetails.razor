@@ -7,14 +7,16 @@
 @rendermode InteractiveServer
 
 <h3>Book Details</h3>
+<h3> <strong> @book.Name </strong> </h3>
 
 @if (book != null)
 {
-    <div>
+    <div class="bookCard">
         <p><strong>Name:</strong> @book.Name</p>
         <p><strong>Author:</strong> @book.Author</p>
         <p><strong>Publication Date:</strong> @book.PublicationDate.ToShortDateString()</p>
         <p><strong>Editorial:</strong> @book.Editorial</p>
+        <p><strong>Created At:</strong> @book.CreatedAt</p>
         <button @onclick="DeleteBook">Delete</button>
     </div>
 }
