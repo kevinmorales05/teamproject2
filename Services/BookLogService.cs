@@ -39,4 +39,28 @@ public class BookLogService{
         await _context.Books.AddRangeAsync(SeedData.GetBooks());
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateBookLog(Entries entry)
+    {
+        var existingEntry = await _context.Entries.FindAsync(entry.Id);
+        if (existingEntry != null)
+        {
+            existingEntry.ProgressPercentage = entry.ProgressPercentage;
+            existingEntry.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task DeleteBookLog(int entryId)
+    {
+        var entry = await _context.Entries.FindAsync(entryId);
+        entry.DeletedAt = DateTime.Now;
+        if (entry != null)
+        {
+            _context.Entries.Remove(entry);
+            await _context.SaveChangesAsync();
+        }
+    }
+
 }

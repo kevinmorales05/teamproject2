@@ -54,6 +54,7 @@
                     <th>Progress (%)</th>
                     <th>Date Created</th>
                     <th>Last Updated</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -64,6 +65,10 @@
                         <td>@logEntry.ProgressPercentage</td>
                         <td>@logEntry.CreatedAt.ToString("g")</td>
                         <td>@logEntry.UpdatedAt.ToString("g")</td>
+                        <td>
+                            <button >Edit</button>
+                            <button >Delete</button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -75,7 +80,7 @@
     private Entries entry = new Entries();
     private List<Entries> entries = new List<Entries>();
     private List<Book> availableBooks = new List<Book>();
-    private int AccountId = 1;
+    
     private string errorMessage = string.Empty;
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask {get; set;}
@@ -84,25 +89,34 @@
     {
         availableBooks = await BookLogService.LoadBooks();
         await LoadEntries();
-        Console.WriteLine("HEre it comes jeheh");
-        await GetAccountId();
 
     }
 
-    public async Task GetAccountId() {
+    public async Task<int> GetAccountId() 
+    {
         var authState = await authenticationStateTask;
-        Console.WriteLine("HEre it comes jeheh");
-        Console.WriteLine(authState?.User?.Identity?.Name);
-        Console.WriteLine(authState?.User?.FindFirst("accountId")?.Value);
+        var accountIdClaim = authState.User.FindFirst("AccountId");
+        if (accountIdClaim != null)
+        {
+            return int.Parse(accountIdClaim.Value);
+        }
+        else{
+            NavigationManager.NavigateTo("/login");
+            return -1;
+        }
     }
 
     private async Task LoadEntries()
     {
+        // Get Account Id
+        int AccountId = await GetAccountId();
         entries = await BookLogService.GetEntryList(AccountId);
     }
 
     private async Task AddToBookLog()
     {
+        // Get Account Id
+        int AccountId = await GetAccountId();
         // Reset error message
         errorMessage = string.Empty;
 
@@ -126,6 +140,14 @@
         await LoadEntries();
         entry = new Entries();
     }
+
+    private async Task UpdateBookLog()
+    {
+        await BookLogService.UpdateBookLog(entry);
+        await LoadEntries();
+        entry = new Entries(); // Reset entry
+    }
+
 }
 
 
