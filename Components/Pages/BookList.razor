@@ -9,11 +9,11 @@
 <h1>Book List</h1>
 <p>These are the available books</p>
 
-@if (books == null)
+@if (books2 == null)
 {
   <p>Loading...</p>
 }
-else if (!books.Any())
+else if (!books2.Any())
 {
   <p>No books found.</p>
 }
@@ -37,9 +37,9 @@ else
 }
 
 @code {
-  private List<Book> books = SeedData.GetBooks();
+  //private List<Book> books = SeedData.GetBooks();
 
-  private List<Book> books2 = SeedData.GetBooks();
+  private List<Book> books2;
 
     protected override async Task OnInitializedAsync()
   {

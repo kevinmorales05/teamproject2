@@ -15,8 +15,7 @@ namespace Team2Project.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Author = table.Column<string>(type: "TEXT", nullable: true),
                     PublicationDate = table.Column<DateTime>(type: "TEXT", nullable: true),
@@ -78,7 +77,7 @@ namespace Team2Project.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BookId = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProgressPercentage = table.Column<double>(type: "REAL", nullable: true),
                     AccountId = table.Column<int>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),

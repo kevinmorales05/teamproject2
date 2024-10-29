@@ -19,7 +19,7 @@ namespace Team2Project.Migrations
 
             modelBuilder.Entity("Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 

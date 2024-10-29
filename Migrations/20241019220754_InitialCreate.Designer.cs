@@ -22,7 +22,7 @@ namespace Team2Project.Migrations
 
             modelBuilder.Entity("Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -109,7 +109,7 @@ namespace Team2Project.Migrations
                     b.Property<int?>("AccountId1")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BookId")
+                    b.Property<Guid>("BookId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -169,7 +169,7 @@ namespace Team2Project.Migrations
                     b.Property<int?>("AccountId1")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BookId")
+                    b.Property<Guid>("BookId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

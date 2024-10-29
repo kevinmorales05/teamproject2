@@ -37,6 +37,7 @@
              Name = Name, Author = Author, PublicationDate = Publication, Editorial = Editorial,
             CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now };
+        newBook.Id = Guid.NewGuid(); // Generate a new unique ID
         BookService.Add(newBook);
         DbContext.Books.Add(newBook);
         await DbContext.SaveChangesAsync();
