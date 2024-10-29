@@ -3,7 +3,7 @@ using Team2Project.Models;
 
 namespace Team2Project.Services;
 
-public static class BookService
+public class BookService
 {
     private static List<Book> books;
     static int nextId = 3;
@@ -89,6 +89,8 @@ public static class BookService
 
         books[index] = Book;
     }
+
+   
 
     }
 
