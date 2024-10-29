@@ -87,7 +87,7 @@
                             || b.Author.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
 
     // Add book to wishlist if not already present
-    private async Task AddToWishlist(int bookId)
+    private async Task AddToWishlist(Guid bookId)
     {
         // Get the authentication state
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();

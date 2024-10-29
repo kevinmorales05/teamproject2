@@ -15,7 +15,7 @@ public class WishlistService
     }
 
     // Method to add a book to a user's wishlist
-    public async Task AddToWishlist(int accountId, int bookId)
+    public async Task AddToWishlist(int accountId, Guid bookId)
     {
         var wishlistEntry = new Wishlist 
         { 

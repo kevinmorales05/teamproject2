@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Team2Project.Components;
 using Team2Project.Models;
@@ -12,6 +13,16 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "auth_token";
+        options.LoginPath = "/login";
+        options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
+        options.AccessDeniedPath = "/access-denied";
+    });
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<WishlistService>(); // add wishlsit services to record user's wishlists
 
 
@@ -30,6 +41,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
