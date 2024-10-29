@@ -154,74 +154,54 @@ h1:focus {
     color: #007bff;
 }
 
+/* BOOK LOG STYLING */
 
-/* BOOK LIST STYLING */
-.book-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-.book-card {
-    background-color: lightgray;
-    color: black;
-    width: 30%;
-    height: 200px;
-    border: 1px solid black;
-    border-radius: 10px;
-    padding: 8px;
-    margin: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-.book-card h3 {
-    font-size: 1.2rem;
-}
-.book-card h2 {
-    color: blue;
-    font-weight: bold;
-    font-size: 1.8rem;
-}
-.book-cover {
-
-}
-.book-content {
-
-}
-
-/* Modal Success */
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-   
-}
-
-.modal-content {
-    background-color: white;
-    padding: 20px;
+/* Style for the form container */
+.form-container {
+    border: 1px solid #ccc; /* Border around the form */
+    padding: 16px;
+    margin-bottom: 20px;
     border-radius: 5px;
-    text-align: center;
-    width: 300px;
-    margin: 0 auto;
-    justify-content: center;
-    align-self: center;
-    margin-top: 200px;
+    background-color: #f9f9f9; /* Light background color */
 }
 
-/* Book Details Style */
-
-.bookCard {
-    background-color: lightgray;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 10px;
+/* Style for the log container */
+.log-container {
+    border: 1px solid #ccc; /* Border around the log section */
+    padding: 16px;
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Light background color */
 }
 
+/* Table styles */
+.log-container table {
+    width: 100%;
+    border-collapse: collapse; /* Collapse borders for a cleaner look */
+}
+
+.log-container th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+.log-container th {
+    background-color: #333; /* Dark background for table header */
+    color: white; /* White text for table header */
+}
+
+/* Striped table rows */
+.log-container tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+.log-container tr:nth-child(odd) {
+    background-color: white; /* White for odd rows */
+}
+
+/* Border for table cells */
+.log-container td {
+    border: 1px solid #ddd; /* Light gray border around cells */
+}
 
 /* Responsive layout for smaller screens */
 @media (max-width: 1200px) {
