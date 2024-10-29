@@ -63,9 +63,9 @@ namespace Team2Project.Migrations
 
             modelBuilder.Entity("Team2Project.Models.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Author")
                         .IsRequired()
@@ -108,8 +108,8 @@ namespace Team2Project.Migrations
                     b.Property<int?>("AccountId1")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -168,8 +168,8 @@ namespace Team2Project.Migrations
                     b.Property<int?>("AccountId1")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");

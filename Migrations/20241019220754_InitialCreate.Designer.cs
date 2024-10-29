@@ -110,7 +110,7 @@ namespace Team2Project.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("BookId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -170,7 +170,7 @@ namespace Team2Project.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("BookId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
