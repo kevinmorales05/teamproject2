@@ -213,6 +213,15 @@ h1:focus {
     margin-top: 200px;
 }
 
+/* Book Details Style */
+
+.bookCard {
+    background-color: lightgray;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+}
+
 
 /* Responsive layout for smaller screens */
 @media (max-width: 1200px) {
