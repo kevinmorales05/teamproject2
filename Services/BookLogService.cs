@@ -34,7 +34,6 @@ public class BookLogService{
     public async Task<List<Book>> LoadBooks() {
         return await _context.Books.ToListAsync();
     }
-<<<<<<< HEAD
 
     public async Task LoadOnce() {
         await _context.Books.AddRangeAsync(SeedData.GetBooks());
