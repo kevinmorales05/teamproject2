@@ -1,0 +1,118 @@
+/* Typography and General Styles */
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f7f8fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+a, .btn-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover, .btn-link:hover {
+    color: #0056b3;
+}
+
+h1, h2 {
+    color: #333;
+    font-weight: 700;
+}
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #1b6ec2;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1861ac;
+}
+
+/* Form Container Styles */
+.form-container {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-container input[type="number"],
+.form-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Error Message */
+.validation-message {
+    color: #e50000;
+    font-weight: 600;
+}
+
+/* Log Container Styles */
+.log-container {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.log-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.log-container th, .log-container td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.log-container th {
+    background-color: #333;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.log-container tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-container, .log-container {
+        padding: 16px;
+    }
+
+    .form-container label,
+    .form-container input,
+    .form-container select {
+        font-size: 1rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+}
