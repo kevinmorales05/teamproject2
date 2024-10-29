@@ -23,6 +23,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddScoped<WishlistService>(); // add wishlsit services to record user's wishlists
+
+
 
 var app = builder.Build();
 

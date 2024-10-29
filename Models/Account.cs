@@ -16,9 +16,9 @@ namespace Team2Project.Models
     public DateTime UpdatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
 
-    public People People {get;set;}
-    public List<Wishlist> Wishlist {get; set;}
-    public List<Entries> Entries {get; set;}
+    public People People { get;set; }
+    public List<Wishlist> Wishlist { get; set; } = new List<Wishlist>();
+    public List<Entries> Entries { get; set; }
 
 
     public Account()
