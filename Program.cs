@@ -27,6 +27,10 @@ builder.Services.AddScoped<WishlistService>(); // add wishlsit services to recor
 
 builder.Services.AddScoped<BookLogService>(); // add booklog service to record user's booklogs
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(80); // Set this to match the EXPOSE port in the Dockerfile
+});
 
 
 var app = builder.Build();

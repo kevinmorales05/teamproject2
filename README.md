@@ -26,3 +26,9 @@ TODO: Describe and show how to build your code and run the tests.
 dotnet ef database drop --force
 - Build the database
 dotnet ef database update
+
+
+# Set up using docker
+docker build -t read-tree-app .
+docker run -d -p 5001:80 read-tree-app
+
