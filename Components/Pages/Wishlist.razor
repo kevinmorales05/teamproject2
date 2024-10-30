@@ -66,15 +66,17 @@
     private List<Book> books = new List<Book>();
     private List<Book> wishlistBooks = new List<Book>();
 
-    private int accountId = 1; // Replace with the actual logged-in user's AccountId
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask {get; set;}
 
-    protected override void OnInitialized()
-    {
-        // Check to see if a user is logged in
-        wishlistBooks = WishlistService.GetWishlistBooks(accountId);
-    }
+    @* private int accountId = 1; // Replace with the actual logged-in user's AccountId *@
+
      protected override async Task OnInitializedAsync()
     {
+        var accountId = await GetAccountId();
+        // Check to see if a user is logged in
+        wishlistBooks = WishlistService.GetWishlistBooks(accountId);
+    
 
         books = await DbContext.Books.ToListAsync();
         // Check to see if a user is logged in
@@ -114,8 +116,23 @@
         // Proceed with adding to wishlist if the user is authenticated
         if (!wishlistBooks.Any(b => b.Id == bookId))
         {
+            var accountId = await GetAccountId();
             await WishlistService.AddToWishlist(accountId, bookId); // Add to database
             wishlistBooks = WishlistService.GetWishlistBooks(accountId); // Refresh wishlist
+        }
+    }
+
+    public async Task<int> GetAccountId() 
+    {
+        var authState = await authenticationStateTask;
+        var accountIdClaim = authState.User.FindFirst("AccountId");
+        if (accountIdClaim != null)
+        {
+            return int.Parse(accountIdClaim.Value);
+        }
+        else{
+            NavigationManager.NavigateTo("/login");
+            return -1;
         }
     }
 }
