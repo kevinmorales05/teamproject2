@@ -2,7 +2,7 @@
 <div class="overlay">
     <div class="dialog">
         <div class="dialog-header">
-                <div> </div>
+                <div>@HeaderContent</div>
 
                 <div>
                     <div class="close">
@@ -26,6 +26,7 @@
     [Parameter] public string? Title { get; set; }
     [Parameter] public RenderFragment? BodyContent { get; set; }
     [Parameter] public RenderFragment? FooterContent { get; set; }
+    [Parameter] public RenderFragment? HeaderContent { get; set; }
     [Parameter] public bool Opened { get; set; }
     [Parameter] public EventCallback CloseButtonClicked { get; set; }
 

@@ -77,6 +77,9 @@
 </div>
 
 <Dialog Title="Update Progress" Opened="isUpdateDialogOpen" CloseButtonClicked="@CloseUpdateDialog">
+    <HeaderContent>
+        <h1>Update Progress</h1>
+    </HeaderContent>
     <BodyContent>
         <p>Book Name: @selectedEntry.Book.Name</p>
         <label>Progress Percentage:</label>
@@ -89,6 +92,9 @@
 </Dialog>
 
 <Dialog Title="Delete Confirmation" Opened="isDeleteDialogOpen" CloseButtonClicked="@CloseDeleteDialog">
+    <HeaderContent>
+        <h1>Delete Entry</h1>
+    </HeaderContent>
     <BodyContent>
         <p>Are you sure you want to delete this entry?</p>
     </BodyContent>
@@ -148,7 +154,7 @@
         errorMessage = string.Empty;
 
         // Validate fields
-        if (entry.BookId != Guid.Empty)
+        if (entry.BookId == Guid.Empty)
         {
             errorMessage = "Please select a book.";
             return;
