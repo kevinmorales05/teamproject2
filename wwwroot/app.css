@@ -219,6 +219,31 @@ h1:focus {
     margin: 10px;
 }
 
+form {
+    padding: 10px;
+    margin: 10px;
+}
+
+form div {
+    padding: 10px;
+    margin: 10px;
+}
+
+div input {
+    border-radius: 10px;
+}
+
+form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+}
+
 /* Responsive layout for smaller screens */
 @media (max-width: 1200px) {
     .wishlist-container {
