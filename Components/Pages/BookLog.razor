@@ -1,0 +1,223 @@
+@page "/bookLog"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.EntityFrameworkCore
+@using Team2Project.Models
+@inject NavigationManager NavigationManager
+@inject BookLogService BookLogService
+@rendermode InteractiveServer
+
+<PageTitle>Book Log</PageTitle>
+
+<h1>Book Log</h1>
+
+<!-- Form to Add a New Entry -->
+<div class="form-container">
+    <h2>Add Book Progress</h2>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p style="color:red">@errorMessage</p>
+    }
+
+    <div>
+        <label>Book:</label>
+        <select @bind="entry.BookId">
+            <option value="">-- Select a Book --</option>
+            @foreach (var book in availableBooks)
+            {
+                <option value="@book.Id">@book.Name by @book.Author</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label>Progress Percentage:</label>
+        <input type="number" @bind="entry.ProgressPercentage" min="0" max="100" />
+    </div>
+
+    <button @onclick="AddToBookLog">Add Entry</button>
+</div>
+
+<!-- Display Entries in the Book Log -->
+<div class="log-container">
+    <h2>Book Progress Log</h2>
+    @if (entries.Count == 0)
+    {
+        <p>No entries found.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Book Name</th>
+                    <th>Progress (%)</th>
+                    <th>Date Created</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var logEntry in entries)
+                {
+                    <tr>
+                        <td>@availableBooks.FirstOrDefault(b => b.Id == logEntry.BookId)?.Name</td>
+                        <td>@logEntry.ProgressPercentage</td>
+                        <td>@logEntry.CreatedAt.ToString("g")</td>
+                        <td>@logEntry.UpdatedAt.ToString("g")</td>
+                        <td>
+                            <button @onclick="() => OpenUpdateDialog(logEntry)">Edit</button>
+                            <button @onclick="() => OpenDeleteDialog(logEntry)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<Dialog Title="Update Progress" Opened="isUpdateDialogOpen" CloseButtonClicked="@CloseUpdateDialog">
+    <HeaderContent>
+        <h1>Update Progress</h1>
+    </HeaderContent>
+    <BodyContent>
+        <p>Book Name: @selectedEntry.Book.Name</p>
+        <label>Progress Percentage:</label>
+        <input type="number" @bind="selectedEntry.ProgressPercentage" min="0" max="100" />
+    </BodyContent>
+    <FooterContent>
+        <button class="ok" @onclick="ConfirmUpdate">Update</button>
+        <button class="cancel" @onclick="CloseUpdateDialog">Cancel</button>
+    </FooterContent>
+</Dialog>
+
+<Dialog Title="Delete Confirmation" Opened="isDeleteDialogOpen" CloseButtonClicked="@CloseDeleteDialog">
+    <HeaderContent>
+        <h1>Delete Entry</h1>
+    </HeaderContent>
+    <BodyContent>
+        <p>Are you sure you want to delete this entry?</p>
+    </BodyContent>
+    <FooterContent>
+        <button class="ok" @onclick="ConfirmDelete">Delete</button>
+        <button class="cancel" @onclick="CloseDeleteDialog">Cancel</button>
+    </FooterContent>
+</Dialog>
+
+
+@code {
+    private Entries entry = new Entries();
+    private List<Entries> entries = new List<Entries>();
+    private List<Book> availableBooks = new List<Book>();
+    private bool isUpdateDialogOpen = false;
+    private bool isDeleteDialogOpen = false;
+    private Entries selectedEntry = new Entries();
+    
+    
+    private string errorMessage = string.Empty;
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask {get; set;}
+
+    protected override async Task OnInitializedAsync()
+    {
+        availableBooks = await BookLogService.LoadBooks();
+        await LoadEntries();
+
+    }
+
+    public async Task<int> GetAccountId() 
+    {
+        var authState = await authenticationStateTask;
+        var accountIdClaim = authState.User.FindFirst("AccountId");
+        if (accountIdClaim != null)
+        {
+            return int.Parse(accountIdClaim.Value);
+        }
+        else{
+            NavigationManager.NavigateTo("/login");
+            return -1;
+        }
+    }
+
+    private async Task LoadEntries()
+    {
+        // Get Account Id
+        int AccountId = await GetAccountId();
+        entries = await BookLogService.GetEntryList(AccountId);
+    }
+
+    private async Task AddToBookLog()
+    {
+        // Get Account Id
+        int AccountId = await GetAccountId();
+        // Reset error message
+        errorMessage = string.Empty;
+
+        // Validate fields
+        if (entry.BookId == Guid.Empty)
+        {
+            errorMessage = "Please select a book.";
+            return;
+        }
+
+        if (entry.ProgressPercentage == null || entry.ProgressPercentage < 0 || entry.ProgressPercentage > 100)
+        {
+            errorMessage = "Please enter a valid progress percentage (0-100).";
+            return;
+        }
+
+        // Call the service to add the entry
+        await BookLogService.AddToBookLog(AccountId, entry);
+
+        // Reload entries and reset the form
+        await LoadEntries();
+        entry = new Entries();
+    }
+
+    private async Task UpdateBookLog()
+    {
+        await BookLogService.UpdateBookLog(entry);
+        await LoadEntries();
+        entry = new Entries(); // Reset entry
+    }
+
+    private void OpenUpdateDialog(Entries entry)
+    {
+        selectedEntry = entry;  // Set the selected entry for editing
+        isUpdateDialogOpen = true;
+    }
+
+    private void CloseUpdateDialog()
+    {
+        isUpdateDialogOpen = false;
+        selectedEntry = new Entries(); // Reset the selected entry
+    }
+
+    private async Task ConfirmUpdate()
+    {
+        await BookLogService.UpdateBookLog(selectedEntry);
+        await LoadEntries();  // Reload entries to reflect the updated data
+        CloseUpdateDialog();  // Close the dialog
+    }
+
+    private void OpenDeleteDialog(Entries entry)
+    {
+        selectedEntry = entry;  // Set the selected entry for deletion
+        isDeleteDialogOpen = true;
+    }
+
+    private void CloseDeleteDialog()
+    {
+        isDeleteDialogOpen = false;
+        selectedEntry = new Entries(); // Reset the selected entry
+    }
+
+    private async Task ConfirmDelete()
+    {
+        await BookLogService.DeleteBookLog(selectedEntry.Id);
+        await LoadEntries();  // Reload entries to reflect the deletion
+        CloseDeleteDialog();  // Close the dialog
+    }
+
+
+}
