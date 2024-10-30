@@ -1,5 +1,6 @@
 ﻿@page "/wishlist"
 
+@using Microsoft.EntityFrameworkCore
 @using System.Collections.Generic
 @using Microsoft.AspNetCore.Components.Authorization
 @using Team2Project.Models
@@ -8,6 +9,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
+@inject ApplicationDbContext DbContext
 
 <PageTitle>Wish List</PageTitle>
 
@@ -61,7 +63,7 @@
 
 @code {
     private string searchQuery = string.Empty;
-    private List<Book> books = SeedData.GetBooks();
+    private List<Book> books = new List<Book>();
     private List<Book> wishlistBooks = new List<Book>();
 
     private int accountId = 1; // Replace with the actual logged-in user's AccountId
@@ -70,6 +72,15 @@
     {
         // Check to see if a user is logged in
         wishlistBooks = WishlistService.GetWishlistBooks(accountId);
+    }
+     protected override async Task OnInitializedAsync()
+    {
+
+        books = await DbContext.Books.ToListAsync();
+        // Check to see if a user is logged in
+        wishlistBooks = WishlistService.GetWishlistBooks(accountId);
+
+
     }
 
     // Filtered books based on search query
