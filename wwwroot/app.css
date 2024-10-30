@@ -50,6 +50,9 @@ h1:focus {
     border-color: #929292;
 }
 
+.home-background-image {
+  background-image: url(./background.jpg);
+}
 
 /* WISH LIST STYLING */
 
